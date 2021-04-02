@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 const login = (req, res) => {
@@ -6,13 +7,13 @@ const login = (req, res) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      return bcrypt.compare(password, user.password);
-    })
-    .then((matched) => {
-      if (!matched) {
-        return Promise.reject(new Error("Incorrect password or email"));
+      if (user) {
+        res.status(200).send({
+          token: jwt.sign({ _id: user._id }, "super-strong-secret", {
+            expiresIn: "7d",
+          }),
+        });
       }
-      res.send({ message: "Everything good!" });
     })
     .catch((err) => {
       res.status(401).send({ message: err.message });
