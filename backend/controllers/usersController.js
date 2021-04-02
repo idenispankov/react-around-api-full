@@ -1,3 +1,5 @@
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 const getUsers = (req, res) => {
@@ -22,17 +24,28 @@ const getSingleUser = (req, res) => {
     });
 };
 
-const createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  return User.create({ name, about, avatar })
-    .then((user) => res.status(200).send(user))
-    .catch((err) => {
-      if (err.name === "ValidationError") {
-        return res.status(400).send({ message: err.message });
-      }
-      return res.status(500).send({ message: err.message });
-    });
+const createUser = (req, res, next) => {
+  const { email, password, name, about, avatar } = req.body;
+  return bcrypt
+    .hash(password, 10)
+    .then((hash) => {
+      return User.create({ email, password: hash, name, about, avatar });
+    })
+    .then((user) => {
+      console.log(user);
+      res.status(201).send({ _id: user._id, email: user.email });
+    })
+    .catch(next);
 };
+
+// return User.create({ name, about, avatar })
+//     .then((user) => res.status(200).send(user))
+//     .catch((err) => {
+//       if (err.name === "ValidationError") {
+//         return res.status(400).send({ message: err.message });
+//       }
+//       return res.status(500).send({ message: err.message });
+//     });
 
 const updateUser = (req, res) => {
   const { name, about } = req.body;
