@@ -2,6 +2,19 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
+// const login = (req, res, next) => {
+//   const { email, password } = req.body;
+
+//   return User.findUserByCredentials(email, password)
+//     .then((user) => {
+//       console.log(user);
+//       res.status(200).send({
+//         token: jwt.sign({ _id: user._id }, "somesecret", { expiresIn: "7d" }),
+//       });
+//     })
+//     .catch(next);
+// };
+
 const getUsers = (req, res) => {
   return User.find({})
     .then((users) => res.status(200).send(users))
@@ -32,8 +45,7 @@ const createUser = (req, res, next) => {
       return User.create({ email, password: hash, name, about, avatar });
     })
     .then((user) => {
-      console.log(user);
-      res.status(201).send({ _id: user._id, email: user.email });
+      res.status(201).send(user);
     })
     .catch(next);
 };
