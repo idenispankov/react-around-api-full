@@ -1,19 +1,23 @@
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
-// const login = (req, res, next) => {
-//   const { email, password } = req.body;
+const login = (req, res) => {
+  const { email, password } = req.body;
 
-//   return User.findUserByCredentials(email, password)
-//     .then((user) => {
-//       console.log(user);
-//       res.status(200).send({
-//         token: jwt.sign({ _id: user._id }, "somesecret", { expiresIn: "7d" }),
-//       });
-//     })
-//     .catch(next);
-// };
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      return bcrypt.compare(password, user.password);
+    })
+    .then((matched) => {
+      if (!matched) {
+        return Promise.reject(new Error("Incorrect password or email"));
+      }
+      res.send({ message: "Everything good!" });
+    })
+    .catch((err) => {
+      res.status(401).send({ message: err.message });
+    });
+};
 
 const getUsers = (req, res) => {
   return User.find({})
@@ -37,7 +41,7 @@ const getSingleUser = (req, res) => {
     });
 };
 
-const createUser = (req, res, next) => {
+const createUser = (req, res) => {
   const { email, password, name, about, avatar } = req.body;
   return bcrypt
     .hash(password, 10)
@@ -45,19 +49,15 @@ const createUser = (req, res, next) => {
       return User.create({ email, password: hash, name, about, avatar });
     })
     .then((user) => {
-      res.status(201).send(user);
+      res.status(201).send({ _id: user._id, email: user.email });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        return res.status(400).send({ message: err.message });
+      }
+      return res.status(500).send({ message: err.message });
+    });
 };
-
-// return User.create({ name, about, avatar })
-//     .then((user) => res.status(200).send(user))
-//     .catch((err) => {
-//       if (err.name === "ValidationError") {
-//         return res.status(400).send({ message: err.message });
-//       }
-//       return res.status(500).send({ message: err.message });
-//     });
 
 const updateUser = (req, res) => {
   const { name, about } = req.body;
@@ -97,4 +97,5 @@ module.exports = {
   createUser,
   updateUser,
   updateAvatar,
+  login,
 };

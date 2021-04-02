@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const usersRouter = require("./routes/users");
 const cardsRouter = require("./routes/cards");
 const notFoundRouter = require("./routes/notFound");
+const { login, createUser } = require("./controllers/usersController");
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -18,6 +19,9 @@ mongoose.connect("mongodb://localhost:27017/aroundb", {
   useCreateIndex: true,
   useFindAndModify: false,
 });
+
+app.post("/signin", login);
+app.post("/signup", createUser);
 
 app.use((req, res, next) => {
   req.user = {
