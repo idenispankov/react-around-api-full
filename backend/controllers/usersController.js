@@ -1,3 +1,6 @@
+/* eslint-disable object-curly-newline */
+/* eslint-disable consistent-return */
+/* eslint-disable no-else-return */
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
@@ -9,7 +12,7 @@ const login = (req, res) => {
     .then((user) => {
       if (user) {
         res.status(200).send({
-          token: jwt.sign({ _id: user._id }, "super-strong-secret", {
+          token: jwt.sign({ _id: user._id }, "some-secret-key", {
             expiresIn: "7d",
           }),
         });
@@ -25,6 +28,24 @@ const getUsers = (req, res) => {
     .then((users) => res.status(200).send(users))
     .catch((err) => res.status(400).send({ message: err }));
 };
+
+function getCurrentUser(req, res, next) {
+  return User.findById({ _id: req.user._id })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: "User Not Found" });
+      } else {
+        res.status(200).send({
+          _id: user._id,
+          email: user.email,
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+        });
+      }
+    })
+    .catch(next);
+}
 
 const getSingleUser = (req, res) => {
   return User.findById({ _id: req.params.id })
@@ -44,6 +65,7 @@ const getSingleUser = (req, res) => {
 
 const createUser = (req, res) => {
   const { email, password, name, about, avatar } = req.body;
+
   return bcrypt
     .hash(password, 10)
     .then((hash) => {
@@ -99,4 +121,5 @@ module.exports = {
   updateUser,
   updateAvatar,
   login,
+  getCurrentUser,
 };
