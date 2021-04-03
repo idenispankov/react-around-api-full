@@ -19,13 +19,6 @@ mongoose.connect("mongodb://localhost:27017/aroundb", {
 
 app.use(auth);
 
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: "6041b611880cf075fb20df8d",
-//   };
-//   next();
-// });
-
 app.use("/", usersRouter);
 app.use("/", cardsRouter);
 app.use("/", notFoundRouter);

@@ -14,9 +14,10 @@ const {
 // Get All Users
 router.get("/users", getUsers);
 
-// Get Single User
+// Get Single User By Id
 router.get("/users/:id", getSingleUser);
 
+// Get Current User
 router.get("/users/me", getCurrentUser);
 
 // Create User
