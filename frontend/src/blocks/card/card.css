@@ -1,0 +1,24 @@
+@import url(../card/__image/card__image.css);
+@import url(./__group/card__group.css);
+@import url(./__text/card__text.css);
+@import url(./__like-button/card__like-button.css);
+@import url(./__like-button/_active/card__like-button_active.css);
+@import url(./__delete-button/card__delete-button.css);
+
+.card {
+  width: 282px;
+  height: 362px;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  border-radius: 10px;
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+}
+
+@media screen and (max-width:900px) {
+  .card {
+    margin: 0 auto;
+  }
+}
