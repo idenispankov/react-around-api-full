@@ -1,0 +1,11 @@
+.form__input_autorization {
+  background-color: #000;
+  border-bottom: 2px solid #fff;
+  margin: 0 0 30px;
+  color: #fff;
+  outline: none;
+}
+
+.form__input_autorization:last-of-type {
+  margin-bottom: 216px;
+}

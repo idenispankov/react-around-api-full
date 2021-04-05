@@ -1,0 +1,21 @@
+.form__close-button {
+  background-image: url(../../../images/close_icon.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40.7px 40.7px;
+  width: 40.7px;
+  height: 40.7px;
+  background-color: rgba(0, 0, 0, 0);
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.5s linear;
+  position: absolute;
+  border: none;
+  top: -32px;
+  right: -32px;
+}
+
+.form__close-button:hover {
+  opacity: 0.6;
+}
