@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const { celebrate, Joi } = require("celebrate");
 const { errors } = require("celebrate");
 const auth = require("./middleware/auth");
+const { requestLogger, errorLogger } = require("./middleware/logger");
 const usersRouter = require("./routes/users");
 const cardsRouter = require("./routes/cards");
 const { createUser, login } = require("./controllers/usersController");
@@ -13,6 +14,7 @@ const { createUser, login } = require("./controllers/usersController");
 const app = express();
 const { PORT = 3000 } = process.env;
 
+app.use(requestLogger);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
@@ -48,6 +50,7 @@ app.post(
 app.use("/", auth, usersRouter);
 app.use("/", auth, cardsRouter);
 
+app.use(errorLogger);
 app.use(errors());
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
