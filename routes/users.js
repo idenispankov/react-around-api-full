@@ -7,7 +7,14 @@ const {
   createUser,
   updateUser,
   updateAvatar,
+  login,
 } = require("../controllers/usersController");
+
+// Create User
+router.post("/signup", createUser);
+
+// Login User
+router.post("/signin", login);
 
 // Get All Users
 router.get("/users", getUsers);
@@ -15,13 +22,10 @@ router.get("/users", getUsers);
 // Get Single User
 router.get("/users/:id", getSingleUser);
 
-// Create User
-router.post("/users", createUser);
-
 // Update User
 router.patch("/users/:id", updateUser);
 
-// Update Avavatar
+// Update Avatar
 router.patch("/users/:id/avatar", updateAvatar);
 
 module.exports = router;

@@ -1,5 +1,39 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+
+// Login Handler
+const login = (req, res) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      if (user) {
+        res.status(200).send({
+          token: jwt.sign({ _id: user._id }, "super-strong-secret", {
+            expiresIn: "7d",
+          }),
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(401).send({ message: err.message });
+    });
+};
+
+// Create User Handler
+const createUser = (req, res) => {
+  const { email, password, name, about, avatar } = req.body;
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => User.create({ email, password: hash, name, about, avatar }))
+    .then((user) => {
+      res.status(201).send({
+        _id: user._id,
+        email: user.email,
+      });
+    })
+    .catch((err) => res.status(400).send({ message: err.message }));
+};
 
 const getUsers = (req, res) => {
   return User.find({})
@@ -21,20 +55,6 @@ const getSingleUser = (req, res) => {
       }
       return res.status(500).send(err.message);
     });
-};
-
-const createUser = (req, res) => {
-  const { email, password, name, about, avatar } = req.body;
-  bcrypt
-    .hash(password, 10)
-    .then((hash) => User.create({ email, password: hash, name, about, avatar }))
-    .then((user) => {
-      res.status(201).send({
-        _id: user._id,
-        email: user.email,
-      });
-    })
-    .catch((err) => res.status(400).send({ message: err.message }));
 };
 
 const updateUser = (req, res) => {
@@ -75,4 +95,5 @@ module.exports = {
   createUser,
   updateUser,
   updateAvatar,
+  login,
 };
