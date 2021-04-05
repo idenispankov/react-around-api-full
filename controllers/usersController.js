@@ -35,10 +35,29 @@ const createUser = (req, res) => {
     .catch((err) => res.status(400).send({ message: err.message }));
 };
 
+// Get All Users
 const getUsers = (req, res) => {
   return User.find({})
     .then((users) => res.status(200).send(users))
     .catch((err) => res.status(400).send({ message: err }));
+};
+
+// Get Current User
+const getCurrenUser = (req, res) => {
+  User.findById({ _id: req.user._id })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: "User Not Found" });
+      }
+      res.status(200).send({
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+      });
+    })
+    .catch((err) => res.status(400).send({ message: err.message }));
 };
 
 const getSingleUser = (req, res) => {
@@ -96,4 +115,5 @@ module.exports = {
   updateUser,
   updateAvatar,
   login,
+  getCurrenUser,
 };

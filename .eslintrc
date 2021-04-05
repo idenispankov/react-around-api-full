@@ -4,6 +4,7 @@
   ],
   "rules": {
       "no-underscore-dangle": 0,
+      "consistent-return": 0,
       "object-curly-newline": 0,
       "no-console": 0,
       "quotes": 0,

@@ -1,4 +1,5 @@
 const Card = require("../models/card");
+const User = require("../models/user");
 
 const getCards = (req, res) => {
   return Card.find({})
@@ -24,12 +25,11 @@ const getSingleCard = (req, res) => {
 
 const createCard = (req, res) => {
   const { name, link } = req.body;
-  return Card.create({
-    name,
-    link,
-    owner: req.user._id,
-  })
-    .then((card) => res.send(card))
+  return User.findById({ _id: req.user._id })
+    .then((owner) => {
+      Card.create({ name, link, owner });
+    })
+    .then((card) => res.status(201).send(card))
     .catch((err) => {
       if (err.name === "ValidationError") {
         return res.status(400).send({ message: err.message });
@@ -39,14 +39,19 @@ const createCard = (req, res) => {
 };
 
 const deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  Card.findById({ _id: req.params.cardId })
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: "Card Not Found" });
       } else if (!card.owner._id === req.user._id) {
         res.status(403).send({ message: "Forbidden!!!" });
+      } else {
+        Card.findByIdAndDelete({ _id: req.params.cardId }).then(() => {
+          res
+            .status(200)
+            .send({ message: "This Card has been succesfully deleted" });
+        });
       }
-      res.status(200).send({ message: "Succesfully Deleted" });
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
