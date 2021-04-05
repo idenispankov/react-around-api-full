@@ -1,50 +1,40 @@
 const Card = require("../models/card");
 const User = require("../models/user");
+const NotFoundError = require("../errors/NotFoundError");
+const UnauthorizedError = require("../errors/UnauthorizedError");
 
-const getCards = (req, res) => {
+const getCards = (req, res, next) => {
   return Card.find({})
     .then((cards) => res.status(200).send(cards))
-    .catch((err) => res.status(404).send({ message: err.message }));
+    .catch(next);
 };
 
-const getSingleCard = (req, res) => {
+const getSingleCard = (req, res, next) => {
   return Card.findById({ _id: req.params.id })
     .then((card) => {
-      if (!card) {
-        return res.status(404).send({ message: "Card Not Found" });
-      }
+      if (!card) throw new NotFoundError("Card not found");
       return res.status(200).send(card);
     })
-    .catch((err) => {
-      if (err.name === "CastError") {
-        return res.status(400).send({ message: err.message });
-      }
-      return res.status(500).send({ message: err.message });
-    });
+    .catch(next);
 };
 
-const createCard = (req, res) => {
+const createCard = (req, res, next) => {
   const { name, link } = req.body;
   return User.findById({ _id: req.user._id })
     .then((owner) => {
       Card.create({ name, link, owner });
     })
     .then((card) => res.status(201).send(card))
-    .catch((err) => {
-      if (err.name === "ValidationError") {
-        return res.status(400).send({ message: err.message });
-      }
-      return res.status(500).send({ message: err.message });
-    });
+    .catch(next);
 };
 
-const deleteCard = (req, res) => {
+const deleteCard = (req, res, next) => {
   Card.findById({ _id: req.params.cardId })
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: "Card Not Found" });
+        throw new NotFoundError("Card not found");
       } else if (!card.owner._id === req.user._id) {
-        res.status(403).send({ message: "Forbidden!!!" });
+        throw new UnauthorizedError("Forbidden");
       } else {
         Card.findByIdAndDelete({ _id: req.params.cardId }).then(() => {
           res
@@ -53,52 +43,33 @@ const deleteCard = (req, res) => {
         });
       }
     })
-    .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(400).send({ message: err.message });
-      }
-      return res.status(500).send({ message: err.message });
-    });
+    .catch(next);
 };
 
-const likeCard = (req, res) => {
+const likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true }
   )
     .then((card) => {
-      if (!card) {
-        res.status(404).send({ message: "Card Not Found" });
-      }
+      if (!card) throw new NotFoundError("Card not found");
       res.status(200).send(card);
     })
-    .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(400).send({ message: err.message });
-      }
-      return res.status(500).send({ message: err.message });
-    });
+    .catch(next);
 };
 
-const dislikeCard = (req, res) => {
+const dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true }
   )
     .then((card) => {
-      if (!card) {
-        res.status(404).send({ message: "Card Not Found" });
-      }
+      if (!card) throw new NotFoundError("Card not found");
       res.status(200).send(card);
     })
-    .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(400).send({ message: err.message });
-      }
-      return res.status(500).send({ message: err.message });
-    });
+    .catch(next);
 };
 
 module.exports = {

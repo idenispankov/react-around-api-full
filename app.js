@@ -27,6 +27,13 @@ app.post("/signin", login);
 app.use("/", auth, usersRouter);
 app.use("/", auth, cardsRouter);
 
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res.status(statusCode).send({
+    message: statusCode === 500 ? "An error occurred on the server" : message,
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server run on port ${PORT}`);
 });
