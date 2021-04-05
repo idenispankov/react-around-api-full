@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 
-mongoose.connect("mongodb://localhost:27017/aroundb", {
+mongoose.connect("mongodb://localhost:27017/arountheus", {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
