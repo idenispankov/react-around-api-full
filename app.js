@@ -3,6 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const { celebrate, Joi } = require("celebrate");
+const { errors } = require("celebrate");
 const auth = require("./middleware/auth");
 const usersRouter = require("./routes/users");
 const cardsRouter = require("./routes/cards");
@@ -21,12 +23,32 @@ mongoose.connect("mongodb://localhost:27017/arountheus", {
   useFindAndModify: false,
 });
 
-app.post("/signup", createUser);
-app.post("/signin", login);
+app.post(
+  "/signup",
+  celebrate({
+    body: Joi.object().keys({
+      email: Joi.string().required().email(),
+      password: Joi.string().required().min(10),
+    }),
+  }),
+  createUser
+);
+
+app.post(
+  "/signin",
+  celebrate({
+    body: Joi.object().keys({
+      email: Joi.string().required().email(),
+      password: Joi.string().required().min(10),
+    }),
+  }),
+  login
+);
 
 app.use("/", auth, usersRouter);
 app.use("/", auth, cardsRouter);
 
+app.use(errors());
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
