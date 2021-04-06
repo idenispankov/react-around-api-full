@@ -23,7 +23,7 @@ const login = (req, res, next) => {
 // Create User Handler
 const createUser = (req, res, next) => {
   const { email, password, name, about, avatar } = req.body;
-  bcrypt
+  return bcrypt
     .hash(password, 10)
     .then((hash) => User.create({ email, password: hash, name, about, avatar }))
     .then((user) => {
@@ -44,7 +44,7 @@ const getUsers = (req, res, next) => {
 
 // Get Current User
 const getCurrenUser = (req, res, next) => {
-  User.findById({ _id: req.user._id })
+  return User.findById({ _id: req.user._id })
     .then((user) => {
       if (!user) throw new NotFoundError("User not found");
       return res.status(200).send({
@@ -75,7 +75,7 @@ const updateUser = (req, res, next) => {
     { new: true, runValidators: true }
   )
     .then((user) => {
-      if (!user) if (!user) throw new NotFoundError("User not found");
+      if (!user) throw new NotFoundError("User not found");
       res.status(200).send(user);
     })
     .catch(next);
