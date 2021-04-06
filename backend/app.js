@@ -27,6 +27,7 @@ mongoose.connect("mongodb://localhost:27017/arountheus", {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
+  useUnifiedTopology: true,
 });
 
 app.post(
