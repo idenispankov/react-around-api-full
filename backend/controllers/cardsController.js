@@ -20,11 +20,17 @@ const getSingleCard = (req, res, next) => {
 
 const createCard = (req, res, next) => {
   const { name, link } = req.body;
+  console.log(req.user._id);
   return User.findById({ _id: req.user._id })
     .then((owner) => {
+      console.log(owner, "owner!!!");
       Card.create({ name, link, owner });
     })
-    .then((card) => res.status(201).send(card))
+    .then((card) => {
+      console.log(card, "CARD!");
+      res.status(201).send(card);
+    })
+
     .catch(next);
 };
 
