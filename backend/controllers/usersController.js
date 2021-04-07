@@ -68,9 +68,10 @@ const getSingleUser = (req, res, next) => {
 };
 
 const updateUser = (req, res, next) => {
+  console.log(req.params._id);
   const { name, about } = req.body;
   return User.findByIdAndUpdate(
-    req.params.id,
+    req.user._id,
     { name, about },
     { new: true, runValidators: true }
   )
