@@ -29,7 +29,7 @@ const createCard = (req, res, next) => {
         .catch(next);
     })
     .catch(next);
-};git add 
+};
 
 const deleteCard = (req, res, next) => {
   Card.findById({ _id: req.params.cardId })
