@@ -1,4 +1,4 @@
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, NODE_ENV } = process.env;
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
@@ -11,9 +11,13 @@ const login = (req, res, next) => {
     .then((user) => {
       if (user) {
         res.status(200).send({
-          token: jwt.sign({ _id: user._id }, JWT_SECRET, {
-            expiresIn: "7d",
-          }),
+          token: jwt.sign(
+            { _id: user._id },
+            NODE_ENV === "production" ? JWT_SECRET : "secret-string",
+            {
+              expiresIn: "7d",
+            }
+          ),
         });
       }
     })
