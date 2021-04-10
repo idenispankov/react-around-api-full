@@ -12,7 +12,7 @@ const cardsRouter = require("./routes/cards");
 const { createUser, login } = require("./controllers/usersController");
 
 const app = express();
-const { PORT = 3000 } = process.env;
+const { PORT = 3001npm  } = process.env;
 
 app.use(cors());
 app.options("*", cors());
