@@ -22,7 +22,6 @@ const createCard = (req, res, next) => {
   Card.create({ ...req.body, owner: req.user._id })
     .then((card) => {
       res.status(201).send(card);
-      console.log(card, "card");
     })
     .catch(next);
 };

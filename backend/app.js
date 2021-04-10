@@ -34,6 +34,12 @@ mongoose.connect("mongodb://localhost:27017/arountheus", {
   useUnifiedTopology: true,
 });
 
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now");
+  }, 0);
+});
+
 app.post(
   "/signup",
   celebrate({
