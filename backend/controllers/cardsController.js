@@ -19,14 +19,10 @@ const getSingleCard = (req, res, next) => {
 };
 
 const createCard = (req, res, next) => {
-  const { name, link } = req.body;
-  return User.findById({ _id: req.user._id })
-    .then((owner) => {
-      Card.create({ name, link, owner })
-        .then((card) => {
-          res.status(201).send(card);
-        })
-        .catch(next);
+  Card.create({ ...req.body, owner: req.user._id })
+    .then((card) => {
+      res.status(201).send(card);
+      console.log(card, "card");
     })
     .catch(next);
 };
