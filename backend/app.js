@@ -14,8 +14,8 @@ const { createUser, login } = require("./controllers/usersController");
 const app = express();
 const { PORT = 3000 } = process.env;
 
-app.use(cors());
 app.options("*", cors());
+app.use(cors());
 
 app.use(requestLogger);
 app.use(express.json());
