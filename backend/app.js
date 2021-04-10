@@ -2,7 +2,6 @@ const helmet = require("helmet");
 const cors = require("cors");
 require("dotenv").config();
 const express = require("express");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const { celebrate, Joi } = require("celebrate");
 const { errors } = require("celebrate");
@@ -16,15 +15,10 @@ const app = express();
 const { PORT = 3000 } = process.env;
 
 app.use(cors());
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
-});
 app.options("*", cors());
 
 app.use(requestLogger);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(helmet());
 
 mongoose.connect("mongodb://localhost:27017/arountheus", {
