@@ -15,7 +15,7 @@ const {
 router.get("/cards", getCards);
 
 // Get Single Card
-router.delete(
+router.get(
   "/cards/:cardId",
   celebrate({
     params: Joi.object().keys({
