@@ -1,8 +1,9 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const cors = require("cors");
 require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
 const { celebrate, Joi } = require("celebrate");
 const { errors } = require("celebrate");
 const auth = require("./middleware/auth");
@@ -14,8 +15,14 @@ const { createUser, login } = require("./controllers/usersController");
 const app = express();
 const { PORT = 3000 } = process.env;
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
 app.use(cors());
 app.options("*", cors());
+app.use(limiter);
 
 app.use(requestLogger);
 app.use(express.json());
