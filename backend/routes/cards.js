@@ -15,7 +15,15 @@ const {
 router.get("/cards", getCards);
 
 // Get Single Card
-router.get("/cards/:id", getSingleCard);
+router.delete(
+  "/cards/:cardId",
+  celebrate({
+    params: Joi.object().keys({
+      cardId: Joi.string().hex().length(24),
+    }),
+  }),
+  getSingleCard
+);
 
 // Create Card
 router.post(
