@@ -1,0 +1,37 @@
+@import url('./__title/form__title.css');
+@import url('./__input/form__input.css');
+@import url('./__button/form__button.css');
+@import url('./__close-button/form__close-button.css');
+@import url('./__close-button/_type-image/form__close-button_type-image.css');
+@import url('./__input/_type_error/form__input_type_error.css');
+@import url('./__error_visible/form__error_visible.css');
+@import url('./__button/_disabled/form__button_disabled.css');
+@import url('./__autorization/form__autorization.css');
+@import url('./__title-autorization/form__title-autorization.css');
+@import url('./__input-autorization/form__input-autorization.css');
+@import url('./__button-autorization/form__button-autorization.css');
+@import url('./__text/form__text.css');
+@import url('./__success/form__success.css');
+@import url('./__image/form__image.css');
+@import url('./__text-tooltip/form__text-tooltip.css');
+@import url('./__autorization/form__autorization.css');
+
+.form {
+  width: 430px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+@media screen and (max-width: 500px) {
+  .form {
+    width: calc(100% - 70px);
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .form {
+    width: 240px;
+  }
+}

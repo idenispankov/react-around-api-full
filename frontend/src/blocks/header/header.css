@@ -1,0 +1,28 @@
+@import url('./__logo/header__logo.css');
+@import url('./__menu/header__menu.css');
+@import url('./__button/header__button.css');
+@import url('./__email/header__emal.css');
+@import url('./__link/header__link.css');
+.header {
+  margin: 45px auto 40px;
+  max-width: 882px;
+  min-height: 74px;
+  border-bottom: 1px solid rgba(84, 84, 84, 0.7);
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 900px) {
+  .header {
+    width: calc(100% - 199px);
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .header {
+    width: 320px;
+    min-height: 56px;
+    margin-top: 28px;
+    margin-bottom: 42px;
+  }
+}
