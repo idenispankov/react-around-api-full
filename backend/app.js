@@ -15,7 +15,7 @@ const cardsRouter = require("./routes/cards");
 
 const { createUser, login } = require("./controllers/usersController");
 
-const ConflictError = require("./errors/ConflictError");
+const conflictError = require("./errors/conflictError");
 const NotFoundError = require("./errors/NotFoundError");
 
 const app = express();
@@ -73,7 +73,7 @@ app.use(errorLogger);
 
 app.use(errors());
 
-app.use(ConflictError);
+app.use(conflictError);
 
 app.listen(PORT, () => {
   console.log(`Server run on port ${PORT}`);
