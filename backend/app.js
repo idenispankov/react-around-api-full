@@ -21,15 +21,15 @@ const NotFoundError = require("./errors/NotFoundError");
 const app = express();
 const { PORT = 3000 } = process.env;
 
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000,
-//   max: 100,
-// });
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
 
 app.use(cors());
 app.options("*", cors());
 app.use(requestLogger);
-// app.use(limiter);
+app.use(limiter);
 app.use(express.json());
 app.use(helmet());
 
