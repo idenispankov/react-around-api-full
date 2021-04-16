@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.denis.students.nomoreparties.site';
+export const BASE_URL = 'https://cryptic-ridge-14112.herokuapp.com';
 
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {

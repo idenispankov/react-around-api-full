@@ -26,7 +26,7 @@ export default function App() {
   const history = useHistory();
 
   const api = new Api({
-    baseUrl: 'https://api.denis.students.nomoreparties.site',
+    baseUrl: 'https://cryptic-ridge-14112.herokuapp.com',
     headers: {
       'Content-Type': 'application/json',
       authorization: `Bearer ${token}`,
